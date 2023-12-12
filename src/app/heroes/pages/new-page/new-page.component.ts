@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit }      from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap } from 'rxjs';
-import { Hero, Publisher } from '../../interfaces/hero.interface';
-import { HeroesService } from '../../services/heroes.service';
+import { MatSnackBar }            from '@angular/material/snack-bar';
+import { filter, switchMap }              from 'rxjs';
+import { MatDialog}               from '@angular/material/dialog';
+import { Hero, Publisher }        from '../../interfaces/hero.interface';
+import { HeroesService }          from '../../services/heroes.service';
+import { ConfirmDialogComponent } from './../../components/confirm-dialog/confirm-dialog.component';
+
 
 
 @Component({
@@ -33,7 +37,8 @@ export class NewPageComponent implements OnInit {
     private heroesService: HeroesService,
     private activatedRoute: ActivatedRoute,
     private router: Router,
-
+    private snackbar: MatSnackBar,
+    private dialog: MatDialog
     ){}
 
    get currentHero() : Hero {
@@ -56,31 +61,64 @@ ngOnInit(): void {
   }
 
   onSubmit():void {
-    if(this.heroForm.invalid) return;
+    if ( this.heroForm.invalid ) return;
 
-    // console.log({
-    //   formIsValid: this.heroForm.valid,
-    //   value: this.heroForm.value,
-    // })
-
-    /**ACTUALZIAR HEROE */
     if ( this.currentHero.id ) {
       this.heroesService.updateHero( this.currentHero )
         .subscribe( hero => {
-          // TODO: mostrar snackbar
+          this.showSnackbar(`${hero.superhero} Super Actualizado!`)
 
         });
+
       return;
     }
-    /*FIN ACTUALZIAR/
 
-  /**AGREGAR HEROE */
     this.heroesService.addHero( this.currentHero )
       .subscribe( hero => {
         // TODO: mostrar snackbar, y navegar a /heroes/edit/ hero.id
-
+        this.router.navigate(['/heroes/edit', hero.id ]);
+        this.showSnackbar(`${hero.superhero} Super Creado !!`)
       });
-      /**FIN AGREGAR */
   }
 
-}
+  showSnackbar(message: string):void{
+      this.snackbar.open(message, 'done', {
+      duration: 3000,
+    })
+  }
+
+  onDeleteHero(){
+
+    if(!this.currentHero.id) throw Error ('El heroe es requerido');
+
+    const dialogRef = this.dialog.open( ConfirmDialogComponent, {
+      data: this.heroForm.value
+    });
+
+    dialogRef.afterClosed()
+      .pipe(
+        filter( (result: boolean) => result ),
+        switchMap( () => this.heroesService.deleteHeroById( this.currentHero.id )),
+        filter( (wasDeleted: boolean) => wasDeleted ),
+      )
+      .subscribe(() => {
+        this.router.navigate(['/heroes']);
+      });
+
+    /*dialogRef.afterClosed().subscribe(result => {
+      if(!result) return;
+      console.log('Registro eliminado');
+      //console.log('The dialog was closed');
+      //console.log({result});
+    });
+      this.heroesService.deleteHeroById( this.currentHero.id )
+      .subscribe( wasDeleted => {
+        if ( wasDeleted )
+          this.router.navigate(['/heroes']);
+      });*/
+
+  }
+
+  }
+
+

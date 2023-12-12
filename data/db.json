@@ -2,7 +2,7 @@
   "users": [
     {
       "id": 1,
-      "usuario": "John Doe",
+      "user": "John Doe",
       "email": "john.due@gmail.com"
     }
   ],
@@ -13,7 +13,8 @@
       "publisher": "DC Comics",
       "alter_ego": "Bruce Wayne",
       "first_appearance": "Mi primer comic #2",
-      "characters": "Bruce Wayne"
+      "characters": "Bruce Wayne",
+      "alt_img": "https://wallpaperaccess.com/full/1127064.jpg"
     },
     {
       "id": "dc-superman",
@@ -21,7 +22,8 @@
       "publisher": "DC Comics",
       "alter_ego": "Kal-El",
       "first_appearance": "Action Comics #1",
-      "characters": "Kal-El"
+      "characters": "Kal-El",
+      "alt_img": "https://img2.rtve.es/imagenes/superman-cumple-80-anos/1524134784000.jpg"
     },
     {
       "id": "dc-flash",
@@ -166,15 +168,6 @@
       "alter_ego": "Norrin Radd",
       "first_appearance": "The Fantastic Four #48",
       "characters": "Norrin Radd"
-    },
-    {
-      "id": "-_rzzNQ",
-      "superhero": "ejemplo",
-      "publisher": "DC Comics",
-      "alter_ego": "ejemplo",
-      "first_appearance": "Mi primer comic #2",
-      "characters": "ejemplo",
-      "alt_img": "https://m.media-amazon.com/images/I/51zmuTAW3tL._AC_UF1000,1000_QL80_.jpg"
     }
   ]
 }
