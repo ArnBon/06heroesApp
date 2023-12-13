@@ -6,7 +6,7 @@ import { environments } from 'src/environments/environments';
 import { User } from "../interfaces/user.interface";
 
 @Injectable({providedIn: 'root'})
-export class ServiceNameService {
+export class AuthService {
   private baseUrl = environments.baseUrl;
   private user?: User;
 
@@ -21,8 +21,13 @@ export class ServiceNameService {
     return this.http.get<User>(`${this.baseUrl}/users/1`)
     .pipe(
       tap(user => this.user = user),
-      tap(user => localStorage.setItem('token', 'aASDgjhasda.asdasd.aadsf123k'))
+      tap(user => localStorage.setItem('token','aASDgjhasda.asdasd.aadsf123k'))
     );
+  }
+
+  logout(){
+    this.user = undefined;
+    localStorage.clear();
   }
 
 
